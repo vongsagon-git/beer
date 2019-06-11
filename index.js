@@ -16,6 +16,23 @@ app.get('/', function (req, res) {
   res.send('SYSTEM')
 })
 
+//แสดงหน้า login
+app.get('/login', function (req, res) {
+  res.send('<form id="myForm" action="http://192.168.1.88:3000/checklogin" method="post">')
+  res.send('<input type="text" name="keytag">ใส่ข้อมูล</input>')
+  res.send('<button type="submit"/>')
+  res.send('</form>')
+
+})
+
+
+
+// function check member for login
+app.post('/่checklogin', (req, res) => {
+  var keytag = req.body.keytag
+  console.log(keytag);
+})
+
 // function
 app.post('/่json', (req, res) => {
   var txt = req.body.jsontxt
