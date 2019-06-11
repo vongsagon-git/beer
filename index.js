@@ -131,7 +131,13 @@ function checkMemberFromMongo(_data,res){
 console.log(_data)
 
    mywritecollection.findOne({_id:_data}, function(err,docs){
-      res.send(docs.name);
+     try{
+       res.send(docs.name);
+     }
+     catch(err){
+       res.send('555');
+     }
+
    });
 
 });
