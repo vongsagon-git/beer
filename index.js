@@ -4,34 +4,31 @@
 //HEAD require NPM
 const express = require('express')
 const bodyParser = require('body-parser')
-const app = express() //assign express เป็น app
-app.use(bodyParser.urlencoded({ extended: true })); //ให้ app ใช้ middleware bodyParser อ่าน urlencoded
+const app = express()
+app.use(bodyParser.urlencoded({ extended: true }));
 var Promise  = require('promise')
 var mongojs  = require('mongojs')
-var mydb = mongojs('mydb') //assign DB เป็น mydb
+var mydb = mongojs('mydb')
 ///////////////////////////////////////////////////////
 
-//แสดงหน้า index
+
 app.get('/', function (req, res) {
   res.send('SYSTEM')
 })
 
-//แสดงหน้า login
+
 app.get('/login', function (req, res) {
-  res.send('<form id="myForm" action="http://192.168.1.88:3000/checklogin" method="post">')
-  res.send('<input type="text" name="keytag">ใส่ข้อมูล</input>')
-  res.send('<button type="submit"/>')
-  res.send('</form>')
-
+  res.send('<html><form id="myForm" action="http://192.168.1.88:3000/checklogin" method="post"><input type="text" name="keytag" /input><button type="submit"/></form></html>')
 })
-
 
 
 // function check member for login
-app.post('/่checklogin', (req, res) => {
+app.post('/checklogin', (req, res) => {
   var keytag = req.body.keytag
   console.log(keytag);
+  checkMember(keytag,res)
 })
+
 
 // function
 app.post('/่json', (req, res) => {
@@ -79,20 +76,20 @@ app.listen(3000, function () {
 ///////////////////////////////////////////////////////
 
 
-
-
+async function checkMember(_data,res){
+  await checkMemberFromMongo(_data,res);
+}
 
 
 async function writejson(_data,res){
   await writeJsonToMongo(_data,res);
 }
 
-
+///////////////////////////////////////////////////////
 
 function writeJsonToMongo(_data,res){
   return new Promise(function(resolve,reject){
     var mywritecollection = mydb.collection('mycollection');
-
 
 
 mywritecollection.aggregate([{$match:{PAY:{$gt:0,$lt:10}}},{$group:{_id:null,txt:{$sum:"$LEO"}}}], function (err, res) {
@@ -119,4 +116,24 @@ mywritecollection.aggregate([{$match:{PAY:{$gt:0,$lt:10}}},{$group:{_id:null,txt
       }
    });
   });
+}
+
+
+///////////////////////////////////////////////////////
+async function checkMember(_data,res){
+  await checkMemberFromMongo(_data,res);
+}
+
+function checkMemberFromMongo(_data,res){
+  return new Promise(function(resolve,reject){
+    var mywritecollection = mydb.collection('member');
+
+console.log(_data)
+
+   mywritecollection.findOne({_id:_data}, function(err,docs){
+      res.send(docs.name);
+   });
+
+});
+
 }
