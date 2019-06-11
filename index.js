@@ -86,7 +86,7 @@ mywritecollection.aggregate([{$match:{PAY:{$gt:0,$lt:10}}},{$group:{_id:null,txt
         console.log(err);
         res.send(String(err));
       }else{
-        console.log('record data ok');
+        console.log('record data ok ok ok ok');
         res.send('record data ok');
       }
    });
