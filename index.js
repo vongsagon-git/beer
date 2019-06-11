@@ -39,7 +39,7 @@ app.post('/json', (req, res) => {
   //var data='{"name":"vongsagon","sname":"boonsawat"}'
   console.log(txt);  
   var json = JSON.parse(txt);
-  //console.log(req);
+  console.log(json);
   writejson(json,res)
 })
 
