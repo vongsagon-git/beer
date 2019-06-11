@@ -23,6 +23,12 @@ app.get('/user/:id/:id2', function (req, res) {
     res.send("HELLO "+id+" "+id2);
 });
 
+app.post('/post2', (req, res) => {
+  //var txt = req.body.name
+  //res.send(txt);
+  //console.log(txt)
+ // writedata(txt,res)
+})
 
 app.post('/post', (req, res) => {
   //var txt = req.body.name
@@ -37,7 +43,7 @@ app.post('/json', (req, res) => {
   //res.send(txt);
   //var data=req;
   //var data='{"name":"vongsagon","sname":"boonsawat"}'
-  console.log(txt);  
+  console.log(txt);
   var json = JSON.parse(txt);
   console.log(json);
   writejson(json,res)
@@ -86,7 +92,3 @@ mywritecollection.aggregate([{$match:{PAY:{$gt:0,$lt:10}}},{$group:{_id:null,txt
    });
   });
 }
-
-
-
-
