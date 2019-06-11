@@ -1,44 +1,23 @@
+
+
+///////////////////////////////////////////////////////
+//HEAD require NPM
 const express = require('express')
 const bodyParser = require('body-parser')
-const app = express()
-app.use(bodyParser.urlencoded({ extended: true }));
-
-
+const app = express() //assign express เป็น app
+app.use(bodyParser.urlencoded({ extended: true })); //ให้ app ใช้ middleware bodyParser อ่าน urlencoded
 var Promise  = require('promise')
 var mongojs  = require('mongojs')
-var mydb = mongojs('mydb')
+var mydb = mongojs('mydb') //assign DB เป็น mydb
+///////////////////////////////////////////////////////
 
+//แสดงหน้า index
 app.get('/', function (req, res) {
-  res.send('Hello World!')
+  res.send('SYSTEM')
 })
 
-app.get('/user/:id', function (req, res) {
-    var id = req.params.req.body.id;
-    res.send("HELLO "+id);
-});
-
-app.get('/user/:id/:id2', function (req, res) {
-    var id = req.params.id;
-    var id2 = req.params.id2;
-    res.send("HELLO "+id+" "+id2);
-});
-
-app.post('/post2', (req, res) => {
-  //var txt = req.body.name
-  //res.send(txt);
-  //console.log(txt)
- // writedata(txt,res)
-})
-
-app.post('/post', (req, res) => {
-  //var txt = req.body.name
-  //res.send(txt);
-  //console.log(txt)
- // writedata(txt,res)
-})
-
-
-app.post('/json', (req, res) => {
+// function
+app.post('/่json', (req, res) => {
   var txt = req.body.jsontxt
   //res.send(txt);
   //var data=req;
@@ -49,9 +28,41 @@ app.post('/json', (req, res) => {
   writejson(json,res)
 })
 
+//app.get('/user/:id', function (req, res) {
+    //var id = req.params.req.body.id;
+    //res.send("HELLO "+id);
+//});
+
+//app.get('/user/:id/:id2', function (req, res) {
+    //var id = req.params.id;
+    //var id2 = req.params.id2;
+    //res.send("HELLO "+id+" "+id2);
+//});
+
+//app.post('/post2', (req, res) => {
+  //var txt = req.body.name
+  //res.send(txt);
+  //console.log(txt)
+ // writedata(txt,res)
+//})
+
+//app.post('/post', (req, res) => {
+  //var txt = req.body.name
+  //res.send(txt);
+  //console.log(txt)
+ // writedata(txt,res)
+//})
+
+
+
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
 })
+
+///////////////////////////////////////////////////////
+
+
+
 
 
 
