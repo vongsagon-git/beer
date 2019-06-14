@@ -1,3 +1,4 @@
+
 <script type="text/javascript" >
 //disable back button
 history.pushState(null, null, '');
@@ -6,36 +7,40 @@ window.addEventListener('popstate', function(event) {
 });
 </script>
 
-<script> 
+<script>
 
 var varpin = "";
-  
-
 
 function whichButton(event) {
 	if(event.keyCode==13){
-      document.getElementById("txt").value = '{"_id":"'+varpin+'"}';
-      	document.getElementById("myForm").submit();
-        
+		document.getElementById("myForm").submit();
 	}else{
 		varpin=varpin.concat(event.keyCode);
-		document.getElementById("pw").value = varpin;
-		document.getElementById("demo").innerHTML += event.keyCode;
+		document.getElementById("keytag").value += event.keyCode;
+
 	}
 }
 
-  
 
-  
-</script>  
+
+
+</script>
 
 <body onkeypress="whichButton(event)">
 
 
-<div id="demo"></div>
-<form id="myForm" action="http://192.168.1.88:3000/json" method="post">
-<input type="text" name="user">ใส่ชื่อ<>
-<input id="txt" name="jsontxt" type="hidden" value=''/>
-</form>
-  
-</body>
+<center>
+<h1>login</h1></center>
+
+
+	<form id="myForm" action="/checklogin" method="post">
+
+
+
+	<input id="keytag" name="keytag" type="hidden" />
+
+
+  	</form>
+
+
+<div class="foot">Developed by Vongsagon Boonsawat</div>
