@@ -1,7 +1,5 @@
-
-
-///////////////////////////////////////////////////////
-//HEAD require NPM
+/////////////////////////////////////////////////////// //HEAD require NPM
+const path = require('path');
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
@@ -12,18 +10,32 @@ var mydb = mongojs('mydb')
 ///////////////////////////////////////////////////////
 
 
+
+
 app.get('/', function (req, res) {
   res.send('SYSTEM')
 })
 
 
+app.get('/login2', function (req, res) {
+  res.send('<html><form id="myForm" action="/checklogin" method="post"><input type="text" name="keytag" /input><button type="submit"/></form></html>')
+})
+
+
 app.get('/login', function (req, res) {
-  res.send('<html><form id="myForm" action="http://192.168.1.88:3000/checklogin" method="post"><input type="text" name="keytag" /input><button type="submit"/></form></html>')
+res.sendFile(path.join(__dirname+'/login.html'));
 })
 
 
 // function check member for login
 app.post('/checklogin', (req, res) => {
+  var keytag = req.body.keytag
+//  console.log(keytag);
+  checkMember(keytag,res)
+})
+
+// function check member for login
+app.post('/checklogin2', (req, res) => {
   var keytag = req.body.keytag
   console.log(keytag);
   checkMember(keytag,res)
@@ -136,6 +148,97 @@ console.log(_data)
      }
      catch(err){
        res.send('555');
+     }
+
+   });
+
+});
+
+}
+
+
+
+///////////////////////////////////////////////////////
+async function checkMember(_data,res){
+  await checkMemberFromMongo(_data,res);
+}
+
+function checkMemberFromMongo(_data,res){
+  return new Promise(function(resolve,reject){
+    var mywritecollection = mydb.collection('member');
+
+console.log(_data)
+
+      mywritecollection.findOne({_id:_data}, function(err,docs){
+     try{
+
+
+       var product = [{"name":"leo","price":69},{"name":"singha","price":79},,{"name":"ice","price":20}];
+
+       var htmltxt='';
+
+       htmltxt+= '<script>';
+
+       htmltxt+= 'function addorder(name) {';
+       for(data in product){
+       htmltxt+= 'if(name=="'+ product[data].name +'"){document.getElementById("'+product[data].name+'").value = parseInt(document.getElementById("'+product[data].name+'").value)+1;document.getElementById("'+product[data].name+'_btn").innerHTML="'+ product[data].name +'"+" = "+document.getElementById("'+product[data].name+'").value;}';
+       }
+
+       htmltxt+= '';
+       htmltxt+= 'updatejson();}';
+
+       htmltxt+= 'function updatejson() {';
+
+       for(data in product){
+       htmltxt+= 'var '+product[data].name+'='+product[data].price+';';
+       }
+
+       htmltxt+= 'var total=0;';
+       htmltxt+= 'var jsontxt="";';
+
+       htmltxt+= 'jsontxt+="{\\"member\\":\\"'+ docs.name +'\\",";';
+       htmltxt+= 'jsontxt+="\\"keytag\\":\\"'+ docs._id +'\\",";';
+
+       for(data in product){
+       htmltxt+= 'total+=parseInt(document.getElementById("' + product[data].name + '").value)*' + product[data].price + ';';
+       htmltxt+= 'jsontxt+="\\"' + product[data].name + '\\":"+parseInt(document.getElementById("' + product[data].name + '").value)+",";';
+       }
+
+       htmltxt+= 'jsontxt+="\\"total\\":"+total+"}";';
+
+       htmltxt+= 'document.getElementById("jsontxt").value = jsontxt;';
+       htmltxt+= 'document.getElementById("total").value = total;';
+
+       htmltxt+= '}';
+       htmltxt+= '</script>';
+
+
+
+       htmltxt+= '<h1>' + docs.name + docs._id  + '</h1>';
+       htmltxt+= '<form id="myForm" action="/order" method="post">';
+       htmltxt+= '<input type="hidden" name="member" value="' + docs.name  + '">';
+       htmltxt+= '<input type="hidden" name="keytag" value="' + docs._id  + '">';
+       htmltxt+= '<input type="text" name="total" id="total" value=0>';
+       htmltxt+= '<input type="text" name="jsontxt" id="jsontxt">';
+
+       for(data in product){
+       htmltxt+= '<input type="hidden" name="' + product[data].name + '" id="' +product[data].name + '" value=0>';
+       }
+
+
+       htmltxt+= '<li>';
+
+       for(data in product){
+           htmltxt+= '<button style="font-size:15px;height:60px;width:150px;background-color: #FFAF50;" type="button" id="' + product[data].name + '_btn" onclick="addorder(' + "'"  + product[data].name + "'" +')" value="">'+product[data].name+'</button>';
+       }
+
+       htmltxt+= '</li>';
+
+
+       res.send(htmltxt);
+     }
+     catch(err){
+       res.redirect('/login');
      }
 
    });
